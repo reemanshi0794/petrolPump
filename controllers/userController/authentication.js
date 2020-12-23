@@ -37,7 +37,10 @@ exports.userCreate = function (req, res) {
                 email: req.body.email,
                 name: req.body.firstname,
               }; // create JWT payload
+              console.log("process.env", process.env);
+              const jwtsecretkey = process.env.API_KEY;
 
+              console.log("jwtsecretkeyjwtsecretkey", jwtsecretkey);
               var token = jwt.sign(payload, jwtsecretkey, { expiresIn: "7d" });
               if (hash) {
                 let user = new User({

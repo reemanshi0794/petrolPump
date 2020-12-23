@@ -1,13 +1,13 @@
 const jwt = require("jsonwebtoken");
-const secretKey = process.env.API_KEY;
+const User = require("../models/user");
+
 module.exports = {
   isAuthenticated: async (req, res, next) => {
     const token = req.headers.authorization || "";
     console.log("isAuthenticated token", token);
+    const secretKey = process.env.API_KEY;
 
-    console.log("jwt.verify", token.split(" "));
-    console.log("token split ", token.split(" ")[1]);
-    await jwt.verify(token.split(" ")[1], secretKey, async (err, decoded) => {
+    await jwt.verify(token, secretKey, async (err, decoded) => {
       if (err) {
         console.log("errerr");
         return res.status(401).json({

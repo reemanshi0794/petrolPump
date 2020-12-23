@@ -12,6 +12,7 @@ let UserSchema = new Schema({
   imageUrl: { type: String }, // stores user imageUrl
   latitude: { type: Number }, // stores user latitude
   longitude: { type: Number }, // stores user longitude
+  token: String,
   isDeleted: { type: Boolean, default: false }, // stores user deleted bit whether user is deleted or not
   isBlocked: { type: Boolean, default: false }, // stores user deleted bit whether user is deleted or not
 });
