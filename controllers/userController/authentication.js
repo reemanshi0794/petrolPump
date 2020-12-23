@@ -1,6 +1,8 @@
 const User = require("../../models/user");
 const util = require("../../common/utils");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const jwtsecretkey = process.env.API_KEY;
 
 //Function to create user and store details in database (sign up process)
 exports.userCreate = function (req, res) {
@@ -30,12 +32,20 @@ exports.userCreate = function (req, res) {
           } else {
             // Function to get hashed password
             bcrypt.hash(req.body.password, 10, function (err, hash) {
+              console.log("KEEEEEY", process.env.API_KEY);
+              const payload = {
+                email: req.body.email,
+                name: req.body.firstname,
+              }; // create JWT payload
+
+              var token = jwt.sign(payload, jwtsecretkey, { expiresIn: "7d" });
               if (hash) {
                 let user = new User({
                   firstname: req.body.firstname,
                   lastname: req.body.lastname,
                   email: req.body.email.toLowerCase(),
                   password: hash,
+                  token: token,
                 });
                 // Store hashed password and other details of user in database
                 user.save(function (err) {
