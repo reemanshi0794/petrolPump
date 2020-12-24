@@ -1,14 +1,19 @@
 const Booking = require("../../models/booking");
 const Pump = require("../../models/pump");
 const util = require("../../common/utils");
-
+const mongoose = require("mongoose");
+const ObjectID = mongoose.Types.ObjectId;
 //Function to create user and store details in database (sign up process)
 exports.createBooking = function (req, res) {
   const { userId, pumpId } = req.body;
+  console.log("req.bodyreq.body", req.body.userId, req.body.pumpId);
 
   let booking = new Booking({
-    userId: userId,
-    pumpId: pumpId,
+    // userId: ObjectID(userId),
+    user: ObjectID("5fe328b0070c94260786e642"),
+
+    // pumpId: ObjectID(pumpId),
+    user: ObjectID("5fe46c84669d87151ec79ef8"),
   });
   booking.save(function (err) {
     if (err) {

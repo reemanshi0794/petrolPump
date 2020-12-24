@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 // user schema fields
 let BookingSchema = new Schema({
   type: { type: String, required: true, max: 100 }, // stores user firstname
-  createdAt: { type: Date, required: true, default: Date.now }, // stores date and time of message
+  // createdAt: { type: Date, required: true, default: Date.now }, // stores date and time of message
 
   pump: {
     type: Schema.Types.ObjectId,
