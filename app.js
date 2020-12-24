@@ -5,6 +5,8 @@ const multer = require("multer");
 
 var http = require("http").Server(app);
 const userRoute = require("./routes/userRoute");
+const bookingsRoute = require("./routes/bookingsRoute");
+
 // initialize our express app
 require("dotenv").config();
 
@@ -17,6 +19,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //   res.sendFile(__dirname + "/index.html");
 // });
 app.use("/", userRoute);
+app.use("/", bookingsRoute);
 
 app.use(express.static(__dirname + "/public"));
 
