@@ -3,6 +3,8 @@ const util = require("../../common/utils");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const jwtsecretkey = process.env.API_KEY;
+const multer = require("multer");
+const app = require("../../app");
 
 //Function to create user and store details in database (sign up process)
 exports.userCreate = function (req, res) {
@@ -123,4 +125,55 @@ exports.userLogin = function (req, res) {
       }
     }
   );
+};
+exports.uploadFile = function (req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+
+  console.log("reqreq", req.body);
+  console.log("reqreq", req.file);
+  var storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, "public/images/uploads");
+    },
+    limits: { fileSize: 3 * 1024 * 1024 }, //3mb
+
+    filename: (req, file, cb) => {
+      cb(null, file.fieldname + "-" + Date.now());
+    },
+  });
+  // 'profile_pic' is the name of our file input field in the HTML form
+  let upload = multer({
+    dest: "uploads/",
+    storage: storage,
+    fileFilter: function (req, file, cb) {
+      console.log("file is", file);
+      cb(null, true);
+    },
+  }).single("image");
+
+  upload(req, res, function (err) {
+    console.log("reqreqfilefile", req.file, err);
+    const files = req.files;
+    console.log("filesfiles", files);
+
+    // req.file contains information of uploaded file
+    // req.body contains information of text fields, if there were any
+
+    if (req.fileValidationError) {
+      return res.send(req.fileValidationError);
+    } else if (!req.file) {
+      return res.send("Please select an image to upload");
+    } else if (req.file.size > 3000000) {
+      return res.send("Please select an image less than 3 mb");
+    } else if (err instanceof multer.MulterError) {
+      return res.send(err);
+    } else if (err) {
+      return res.send(err);
+    }
+
+    // Display uploaded image for user validation
+    res.send(
+      `You have uploaded this image: <hr/><img src="${req.file.path}" width="500"><hr /><a href="./">Upload another image</a>`
+    );
+  });
 };
